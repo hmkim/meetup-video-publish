@@ -1,0 +1,39 @@
+{
+  "host_label": "spk_1",
+  "rationale": "spk_1 opens the recording, hands over between talks, asks the presenters questions and closes the meeting, so spk_1 is the host. spk_3 gives the first talk (~20 min), spk_0 the second (~40 min). spk_2 is an audience member who only asks questions.",
+  "presenters": [
+    {
+      "presenter_label": "spk_3",
+      "inferred_name_or_null": "Presenter One",
+      "talk_title_or_null": "Talk title of the first presenter",
+      "segments": [
+        {"start": "00:07:58.900", "end": "00:27:13.600",
+         "reason": "From the presenter's first sentence of content (after the host's 'is the recording on?') to 'that is all I prepared today, thank you'."},
+        {"start": "00:27:45.100", "end": "00:28:55.100",
+         "reason": "Presenter's own follow-up explanation after the Q&A prompt; kept as talk content."}
+      ],
+      "drop_intervals_inside": [],
+      "notes": "Dropped: pre-talk chatter and mic setup (00:03-00:07), the 'is the recording on?' check, the Q&A/chat-link/survey prompt (00:27:13-00:27:45) and the trailing Q&A (00:28:55-00:35:36)."
+    },
+    {
+      "presenter_label": "spk_0",
+      "inferred_name_or_null": "Presenter Two",
+      "talk_title_or_null": "Talk title of the second presenter",
+      "segments": [
+        {"start": "00:35:53.300", "end": "00:53:51.800",
+         "reason": "From 'hello, today I will talk about...' up to the sentence before the host interrupts with a question."},
+        {"start": "00:54:18.500", "end": "01:15:23.900",
+         "reason": "Resumes at the presenter's next content sentence after the mid-talk exchange; ends at the last talk sentence before the trailing Q&A."}
+      ],
+      "drop_intervals_inside": [],
+      "notes": "The 16 s pause at 01:09:15 is below the 20 s silence threshold and was kept. The audience self-check poll inside the talk was run by the presenter, so it stays. Mid-talk host question + answer (00:53:51-00:54:18) and trailing Q&A/closing remarks (after 01:15:23.9) are dropped."
+    }
+  ],
+  "_meta": {
+    "model": "global.anthropic.claude-opus-5-5",
+    "generated_at": "2026-10-06T05:12:44Z",
+    "talk_only": true,
+    "usage": {"inputTokens": 34020, "outputTokens": 3380},
+    "manual_review": "All six segment boundaries re-set from word-level Transcribe timestamps; the model's own estimates inside long speaker turns were off by up to ~10 s."
+  }
+}

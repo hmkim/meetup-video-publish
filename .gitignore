@@ -1,0 +1,21 @@
+# secrets / tokens -- never commit
+.env
+client_secret*.json
+token.json
+pending_flow.json
+cookies.txt
+
+# media and run artifacts
+*.mp4
+*.m4a
+*.mov
+*.mkv
+work/
+costs/ledger.jsonl
+costs/ledger.md
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/

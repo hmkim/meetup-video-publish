@@ -1,0 +1,23 @@
+{
+  "s3_prefix": "s3://my-meetup-video-bucket/output/meetup-2026-09/",
+  "videos": [
+    {
+      "file": "01-Presenter-One.mp4",
+      "title": "Talk title of the first presenter | Presenter One -- My Monthly Meetup 2026.09",
+      "description": "Part 1 of the My Monthly Meetup (online) held on 2026-09-29.\n\nSpeaker: Presenter One -- Affiliation\nTopic: Talk title of the first presenter\n\n- bullet summary of the talk\n- ...\n\nEdited to the talk only; Q&A removed. #tag1 #tag2",
+      "tags": ["tag1", "tag2"],
+      "categoryId": "28",
+      "defaultLanguage": "ko",
+      "recordingDate": "2026-09-29"
+    },
+    {
+      "file": "02-Presenter-Two.mp4",
+      "title": "Talk title of the second presenter | Presenter Two -- My Monthly Meetup 2026.09",
+      "description": "Part 2 of the My Monthly Meetup (online) held on 2026-09-29.\n\nSpeaker: Presenter Two -- Affiliation\nTopic: Talk title of the second presenter\n\n- bullet summary of the talk\n- ...\n\nEdited to the talk only; Q&A removed. #tag1 #tag3",
+      "tags": ["tag1", "tag3"],
+      "categoryId": "28",
+      "defaultLanguage": "ko",
+      "recordingDate": "2026-09-29"
+    }
+  ]
+}
