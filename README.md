@@ -62,7 +62,7 @@ flowchart LR
 | Plan | `scripts/plan_cuts.py` -> Bedrock Claude | Identify host / presenters / audience, emit keep-segments per presenter as strict JSON | Default model Claude Opus (falls back to Sonnet). `--talk-only` drops every Q&A and host remark, including mid-talk interruptions |
 | Verify | you + `tools/words_in_range.py`, `tools/inspect_cuts.py` | Re-set each segment boundary from word timestamps | Do not skip: the model estimates boundaries inside long speaker turns from text position and can be ~10 s off |
 | Render | `scripts/render.py` -> MediaConvert | One job per presenter, keep-segments concatenated with `InputClippings` | Source resolution and frame rate, H.264 QVBR 8 (max 12 Mbps), AAC 192 kbps, loudness -14 LKFS, length error < 0.2 s |
-| Publish | `scripts/make_meta.py`, `scripts/youtube_auth.py`, `scripts/youtube_upload.py` | Metadata skeleton -> OAuth once -> parallel resumable uploads | Uploads from an unverified OAuth app are forced to **private**; publish from Studio |
+| Publish | `scripts/make_meta.py`, `scripts/youtube_auth.py`, `scripts/youtube_upload.py`, `scripts/youtube_update_meta.py` | Metadata skeleton -> OAuth once -> parallel resumable uploads | Uploads from an unverified OAuth app are forced to **private**; publish from Studio |
 | Cost | `scripts/cost_report.py` -> Cost Explorer | Per-run actual cost into `costs/ledger.md` | Bedrock calls cannot carry tags, so they are estimated from the token counts stored in the plan |
 
 ## Setup
@@ -181,6 +181,28 @@ Review checklist the planner is asked to follow and you should verify:
   over ~3 s; sub-3 s reactions ("yes", "right") are kept because cutting them is more jarring
 - pad boundaries by ~0.3 s and land them on a sentence edge
 
+## Running it with an AI agent
+
+The monthly run is written up as an agent runbook, so you can hand the whole thing to a coding
+agent and only answer its two approval questions (the cut table before rendering, the titles and
+descriptions before uploading).
+
+| Tool | What it reads | Notes |
+|---|---|---|
+| Codex | `AGENTS.md` (automatic) and `.agents/skills/meetup-video-publish` | — |
+| Claude Code | `CLAUDE.md` → `@AGENTS.md`, `.claude/skills/meetup-video-publish` | the skill is picked up when the request matches its description |
+| Kiro / Kiro Crew | `.kiro/skills/meetup-video-publish` (project skill) | or copy `skills/meetup-video-publish/` to `~/.kiro/skills/` for every project |
+| anything else | `AGENTS.md` | the three skill paths are symlinks to `skills/meetup-video-publish/SKILL.md` |
+
+A typical session: *"The recording is at s3://…/input/meetup-2026-11.mp4, here is the event
+announcement, edit and upload."* The agent runs preflight, transcribes and plans, verifies every
+boundary against word timestamps, shows you the cut table, renders after your approval, drafts the
+metadata from the transcript, uploads after your second approval, and schedules the cost report.
+
+`scripts/youtube_update_meta.py <videoId> --replace OLD NEW` fixes the title/description of a
+video that is already up (a mis-spelled name, for instance). It needs the `youtube.force-ssl`
+scope, which `youtube_auth.py` requests since v0.2; a token issued earlier has to be re-issued once.
+
 ## Cost (one 80-minute recording, two presenters, ap-northeast-2, 2026-10)
 
 | Item | Approx. | Note |
@@ -211,6 +233,8 @@ scripts/   pipeline stages and entry points (see table above)
 tools/     word-level timestamp inspection, pricing lookup, presigned PUT helper
 examples/  cuts.example.json, meta.example.json
 costs/     ledger written by cost_report.py (ignored by git)
+AGENTS.md  runbook for coding agents (Codex reads it directly; CLAUDE.md imports it)
+skills/    Agent Skill (SKILL.md); .agents/ .claude/ .kiro/ link to it
 ```
 
 ## License

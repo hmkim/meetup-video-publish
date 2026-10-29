@@ -27,6 +27,8 @@ PENDING = os.path.join(BASE, "pending_flow.json")
 SCOPES = [
     "https://www.googleapis.com/auth/youtube.upload",
     "https://www.googleapis.com/auth/youtube.readonly",
+    # videos.update (youtube_update_meta.py) needs this one; tokens issued without it must be re-issued once
+    "https://www.googleapis.com/auth/youtube.force-ssl",
 ]
 # Loopback redirect; the browser will fail to load it (nothing listens on the laptop),
 # which is fine: we only need the URL it lands on.
